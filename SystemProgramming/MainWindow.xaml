@@ -13,5 +13,9 @@
         <Button x:Name="Threading" Content="1. Многопоточность" 
                 HorizontalContentAlignment="Left"
         Margin="10" Padding="10,5" FontSize="18" Click="Threading_Click" />
+
+        <Button x:Name="Multi" Content="2. Синхронизация" 
+                HorizontalContentAlignment="Left"
+        Margin="10" Padding="10,5" FontSize="18" Click="Multi_Click" />
     </StackPanel>
 </Window>

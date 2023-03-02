@@ -31,5 +31,12 @@ namespace SystemProgramming
             new ThreadingWindow().ShowDialog();
             this.Show();
         }
+
+        private void Multi_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            new MultiWindow().ShowDialog();
+            this.Show();
+        }
     }
 }
