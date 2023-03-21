@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SystemProgramming
 {
@@ -136,7 +137,7 @@ namespace SystemProgramming
         }
 
         private double sum3;
-        private readonly object locker3 = new();     
+        private readonly object locker3 = new();
 
         private void plusPercent3(object? token)
         {
@@ -210,13 +211,78 @@ namespace SystemProgramming
                 val *= factor;
                 sum4 = val;
             }
-            this.Dispatcher.Invoke(() => {
+            this.Dispatcher.Invoke(() =>
+            {
                 ConsoleBlock.Text += val + " Номер месяца - " + month + " Процент - " + perсent + "\n";
                 progressBar4.Value += 100.0 / 12;
             });
 
         }
         #endregion
+
+        #region Thread Pool
+        CancellationTokenSource cts5;
+        private void ButtonStart5_Click(object sender, RoutedEventArgs e)
+        {
+            cts5 = new CancellationTokenSource();
+            for (int i = 0; i < 25; i++)
+            {
+                ThreadPool
+                    .QueueUserWorkItem(
+                    plusPercent5,
+                    new ThreadData3
+                    {
+                        Month = i,
+                        Token = cts5.Token
+                    });
+            }
+        }
+
+        private void ButtonStop5_Click(object sender, RoutedEventArgs e)
+        {
+            cts5?.Cancel();
+        }
+        private double sum5;
+        private readonly object locker5 = new();     // объект для синхронизации
+
+        private void plusPercent5(object? data)
+        {
+            var threadData = data as ThreadData3;
+            if (threadData is null) return;
+            double val;
+            try
+            {
+
+                for (int i = 0; i < 3; i++)
+                {
+                    Thread.Sleep(random.Next(250, 350));   // часть рассчетов,
+                    threadData.Token.ThrowIfCancellationRequested();  // место для возможной отмены потока
+                }
+                double percent = 10 + threadData!.Month;      // вынесенная
+                double factor = 1 + percent / 100;     // за синхроблок
+                lock (locker5)
+                {                                      // внутри блока
+                    val = sum5;                        // остается часть рассчетов
+                    val *= factor;                     // которую нельзя более
+                    sum5 = val;                        // разделять
+                }
+                Dispatcher.Invoke(() =>
+                {
+                    ConsoleBlock.Text += threadData!.Month + " " + percent + " " + val + "\n";
+                    progressBar5.Value += 100.0 / 25;
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    ConsoleBlock.Text += threadData!.Month + " Cancelled\n";
+                });
+            }
+        }
     }
+    #endregion
 }
+
+
 

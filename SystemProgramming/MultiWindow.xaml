@@ -71,6 +71,19 @@
             </DockPanel>
 
 
+            <Label Margin="10 10 10 0">ч.5. Пул потоков</Label>
+            <DockPanel Margin="10 0 10 0">
+                <Button Content="Start" DockPanel.Dock="Left" 
+                       Margin="0 0 10 0" Padding="7 4"
+                       x:Name="ButtonStart5"
+                       Click="ButtonStart5_Click"/>
+                <Button Content="Stop" DockPanel.Dock="Right"
+                        Margin="10 0 0 0" Padding="7 4"
+                          x:Name="ButtonStop5"
+                        Click="ButtonStop5_Click"/>
+                <ProgressBar x:Name="progressBar5"/>
+            </DockPanel>
+
         </StackPanel>
     </Grid>
 </Window>

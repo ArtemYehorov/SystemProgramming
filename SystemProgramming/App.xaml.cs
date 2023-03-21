@@ -13,5 +13,6 @@ namespace SystemProgramming
     /// </summary>
     public partial class App : Application
     {
+        Random random = new Random();
     }
 }

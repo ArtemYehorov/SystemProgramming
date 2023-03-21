@@ -68,6 +68,7 @@
                         Click="ButtonStop4_Click"/>
                 <ProgressBar x:Name="progressBar4"/>
             </DockPanel>
+
         </StackPanel>
     </Grid>
 </Window>

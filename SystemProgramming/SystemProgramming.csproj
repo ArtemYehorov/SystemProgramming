@@ -7,4 +7,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Notes\Task.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Notes\Task.txt" />
+  </ItemGroup>
+
 </Project>
