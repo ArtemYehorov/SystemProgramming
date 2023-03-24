@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SystemProgramming"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="DLLWindow" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -56,6 +57,34 @@
                         Margin="10" Padding="7 4 7 2" FontSize="16"
                         Click="Beep3_Click"/>
             </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="SayHello1" Content="Thread"
+                        Margin="10" Padding="7 4 7 2" FontSize="16"
+                        Click="SayHelloButton_Click"/>
+                <Label x:Name ="SayHelloLabel"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="StartTimer" Content="Start"
+                        Margin="10" Padding="7 4 7 2" FontSize="16"
+                        Click="StartTimer_Click"/>
+                <Label x:Name ="TicksLable" Width="100"/>
+                <Button x:Name="StopTimer" Content="Stop" IsEnabled="false"
+                        Margin="10" Padding="7 4 7 2" FontSize="16"
+                        Click="StopTimer_Click"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="StartTimer1" Content="Start"
+                        Margin="10" Padding="7 4 7 2" FontSize="16"
+                        Click="StartTimer1_Click"/>
+                <Label x:Name ="TicksLable1" Width="120"
+                       Content="00:00:00.00" FontSize="20"/>
+                <Button x:Name="StopTimer1" Content="Stop" IsEnabled="false"
+                        Margin="10" Padding="7 4 7 2" FontSize="16"
+                        Click="StopTimer1_Click"/>
+            </StackPanel>
+
         </StackPanel>
     </Grid>
 </Window>
