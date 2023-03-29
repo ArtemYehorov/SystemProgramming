@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,9 +17,6 @@ using System.Windows.Shapes;
 
 namespace SystemProgramming
 {
-    /// <summary>
-    /// Логика взаимодействия для SynchroWindow.xaml
-    /// </summary>
     public partial class SynchroWindow : Window
     {
         public SynchroWindow()
@@ -162,7 +161,33 @@ namespace SystemProgramming
             }
         }
         #endregion
-    }
 
-    
+        private void StopLock_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StopMonitor_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StopMutex_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StopEWH_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StopSemaphore_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
 }
+
+
+

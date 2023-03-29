@@ -24,30 +24,40 @@
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartLock" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StartLock_Click"/>
+                <Button x:Name="StopLock" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
+                        Click="StopLock_Click"/>
             </StackPanel>
 
             <Label Content="2. Monitor" FontSize="16" Margin="0 15 0 0" />
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartMonitor" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StartMonitor_Click"/>
+                <Button x:Name="StopMonitor" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
+                        Click="StopMonitor_Click"/>
             </StackPanel>
 
             <Label Content="3. Mutex" FontSize="16" Margin="0 15 0 0" />
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartMutex" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StartMutex_Click"/>
+                <Button x:Name="StopMutex" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
+                        Click="StopMutex_Click"/>
             </StackPanel>
 
             <Label Content="4. EventWaitHandle" FontSize="16" Margin="0 15 0 0" />
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartEWH" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StartEWH_Click"/>
+                <Button x:Name="StopEWH" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
+                        Click="StopEWH_Click"/>
             </StackPanel>
 
             <Label Content="5. Semaphore" FontSize="16" Margin="0 15 0 0" />
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartSemaphore" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StartSemaphore_Click"/>
+                <Button x:Name="StopSemaphore" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
+                        Click="StopSemaphore_Click"/>
             </StackPanel>
 
         </StackPanel>
