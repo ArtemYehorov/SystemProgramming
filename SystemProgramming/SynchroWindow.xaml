@@ -59,8 +59,8 @@
                 <Button x:Name="StopSemaphore" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StopSemaphore_Click"/>
             </StackPanel>
-            
-            <Label Content="6. SemaphoreSlim"  FontSize="16"/>
+
+            <Label Content="6. SemaphoreSlim"  FontSize="16" Margin="0 15 0 0"/>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartSemaphoreSlim" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5" 
                         Click="StartSemaphoreSlim_Click"/>
