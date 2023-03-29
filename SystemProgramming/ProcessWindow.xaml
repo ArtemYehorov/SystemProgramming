@@ -33,6 +33,23 @@
                         Margin="5" Padding="7 2 7 4"
                         IsEnabled="False"
                         Click="StopNotepad_Click"/>
+                <Button Content="Выбор файла" x:Name="FileSelection"
+                        Margin="5" Padding="7 2 7 4"
+                        IsEnabled="True"
+                        Click="FileSelection_Click"/>
+            </StackPanel>
+            <Label Content="Запуск браузерной страници"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Запустить сайт" x:Name="StartSite"
+                        Margin="5" Padding="7 2 7 4"
+                        Click="StartSite_Click"/>
+                <Button Content="Закрыть сайт" x:Name="StopSite"
+                        Margin="5" Padding="7 2 7 4"
+                        IsEnabled="False"
+                        Click="StopSite_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="SiteTextBox" Text="https://" />
             </StackPanel>
         </StackPanel>
     </Grid>

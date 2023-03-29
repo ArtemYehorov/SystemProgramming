@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -75,13 +76,13 @@ namespace SystemProgramming
                 ShowProcesses.IsEnabled = true;
             });
         }
+        private string filePath;
         private Process notepadProcess;
         private void StartNotepad_Click(object sender, RoutedEventArgs e)
         {
-            notepadProcess = Process.Start("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-                "-url itstep.org");
-            // notepadProcess = Process.Start("notepad.exe", 
-            //     @"C:\Users\_dns_\source\repos\SystemProgramming-111\Notes\Processes.txt");
+            //notepadProcess = Process.Start("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+              //  "-url itstep.org");
+             notepadProcess = Process.Start("notepad.exe", filePath);
 
             if (notepadProcess is not null)
             {
@@ -104,6 +105,58 @@ namespace SystemProgramming
                 notepadProcess = null!;
             }
         }
+
+        private void FileSelection_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                filePath = openFileDialog.FileName;
+            }
+        }
+
+        private string sitePath;
+        private Process siteProcess;
+
+        private void StartSite_Click(object sender, RoutedEventArgs e)
+        {
+            sitePath = SiteTextBox.Text;
+            if (!string.IsNullOrEmpty(sitePath))
+            {
+                siteProcess = Process.Start("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe", sitePath);
+
+                if (siteProcess is not null)
+                {
+                    StopSite.IsEnabled = true;
+                    StartSite.IsEnabled = false;
+                }
+            }
+            else if (!string.IsNullOrEmpty(SiteTextBox.Text))
+            {
+                siteProcess = Process.Start(SiteTextBox.Text);
+
+                if (siteProcess is not null)
+                {
+                    StopSite.IsEnabled = true;
+                    StartSite.IsEnabled = false;
+                }
+            }
+        }
+        private void StopSite_Click(object sender, RoutedEventArgs e)
+        {
+            if (siteProcess is not null)
+            {
+                siteProcess.CloseMainWindow();
+                siteProcess.Kill();
+                siteProcess.WaitForExit();
+
+                StopSite.IsEnabled = true;
+                StartSite.IsEnabled = false;
+
+                siteProcess = null!;
+            }
+        }
+
     }
 }
 /* Д.З. Процессы.
