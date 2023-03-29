@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SystemProgramming"
         mc:Ignorable="d"
-        Title="SynchroWindow" Height="450" Width="800">
+        Title="SynchroWindow" Height="550" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -59,7 +59,14 @@
                 <Button x:Name="StopSemaphore" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5"
                         Click="StopSemaphore_Click"/>
             </StackPanel>
-
+            
+            <Label Content="6. SemaphoreSlim"  FontSize="16"/>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="StartSemaphoreSlim" Content="Start" FontSize="16" Margin="10 0" Padding="8 2 8 5" 
+                        Click="StartSemaphoreSlim_Click"/>
+                <Button x:Name="StopSemaphoreSlim" Content="Stop" FontSize="16" Margin="10 0" Padding="8 2 8 5" 
+                        Click="StopSemaphoreSlim_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

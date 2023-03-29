@@ -23,15 +23,20 @@ namespace SystemProgramming
         {
             InitializeComponent();
         }
-
+        private volatile bool stopAll = false;
         #region 1. lock
 
         private void StartLock_Click(object sender, RoutedEventArgs e)
         {
+            stopAll = false;
             for (int i = 1; i <= 5; ++i)
             {
                 new Thread(DoWork1).Start(i);
             }
+        }
+        private void StopLock_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = true;
         }
         private readonly object locker = new();   // Вместо системного ресурса синхронизации
                                                   // мы используем возможности ссылочных типов -
@@ -40,9 +45,12 @@ namespace SystemProgramming
         {
             lock (locker)
             {
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
-                Thread.Sleep(1000);
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                while (!stopAll)
+                {
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
+                    Thread.Sleep(1000);
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                }
             }
         }
 
@@ -51,21 +59,29 @@ namespace SystemProgramming
         #region 2. Monitor
         private void StartMonitor_Click(object sender, RoutedEventArgs e)
         {
+            stopAll = false;
             for (int i = 1; i <= 5; ++i)
             {
                 new Thread(DoWork2).Start(i);
             }
         }
+        private void StopMonitor_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = true;
+        }
+
         private readonly object monitor = new();
         private void DoWork2(object? state)
         {
             try
             {
-                Monitor.Enter(monitor);  // Вход в монитор == блокирование объекта monitor
-
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
-                Thread.Sleep(1000);
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                while (!stopAll)
+                {
+                    Monitor.Enter(monitor);
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
+                    Thread.Sleep(1000);
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                }
 
             }
             finally
@@ -78,22 +94,29 @@ namespace SystemProgramming
         #region 3. Mutex
         private void StartMutex_Click(object sender, RoutedEventArgs e)
         {
+            stopAll = false;
             for (int i = 1; i <= 5; ++i)
             {
                 new Thread(DoWork3).Start(i);
             }
         }
-
+        private void StopMutex_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = true;
+        }
         private Mutex mutex = new();
 
         private void DoWork3(object? state)
         {
-            mutex.WaitOne();
             try
             {
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
-                Thread.Sleep(1000);
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                mutex.WaitOne();
+                while (!stopAll)
+                {
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
+                    Thread.Sleep(1000);
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                }
             }
             finally
             {
@@ -105,6 +128,7 @@ namespace SystemProgramming
         #region 4. EventWaitHandle
         private void StartEWH_Click(object sender, RoutedEventArgs e)
         {
+            stopAll = false;
             for (int i = 1; i <= 5; ++i)
             {
                 new Thread(DoWork4).Start(i);
@@ -112,36 +136,47 @@ namespace SystemProgramming
             // тут можно сделать работу до начала работы потоков
             gates.Set();  // подать сигнал первого открытия
         }
+        private void StopEWH_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = true;
+        }
 
         private EventWaitHandle gates = new AutoResetEvent(false);  // объект с авто-разблокировкой по событию, true - изначально открытый
 
         private void DoWork4(object? state)
         {
-            gates.WaitOne();  // ожидание открытия "ворот"
+            gates.WaitOne();
+            while (!stopAll)
+            {
+                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
+                Thread.Sleep(1000);
+                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
 
-            Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
-            Thread.Sleep(1000);
-            Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
-
-            gates.Set();  // подать сигнал следующего открытия
+                gates.Set();
+            }
         }
         #endregion
 
         #region 5. Semaphore
         private void StartSemaphore_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 1; i <= 5; ++i)
+            stopAll = false;
+            for (int i = 1; i < 5; i++)
             {
                 new Thread(DoWork5).Start(i);
             }
-            semaphore.Release(2);   // изначально открыли 2 свободных места
-
+            semaphore.Release(2);
             Task.Run(async () =>
             {
-                await Task.Delay(200);  // Через паузу - открыли еще одно 
-                semaphore.Release(1);   // свободное место
+                await Task.Delay(200);
+                semaphore.Release(1);
             });
         }
+        private void StopSemaphore_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = true;
+        }
+
 
         // private Semaphore semaphore = new(3, 3);   // первая 3 - свободные места, вторая 3 - максимальное кол-во
         private Semaphore semaphore = new(0, 3);  // изначально нет свободных мест
@@ -151,9 +186,12 @@ namespace SystemProgramming
             semaphore.WaitOne();
             try
             {
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
-                Thread.Sleep(1000);
-                Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                while (!stopAll)
+                {
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
+                    Thread.Sleep(1000);
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                }
             }
             finally
             {
@@ -162,30 +200,47 @@ namespace SystemProgramming
         }
         #endregion
 
-        private void StopLock_Click(object sender, RoutedEventArgs e)
-        {
+        #region 6. SemaphoreSlim
 
+        private void StartSemaphoreSlim_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = false;
+            for (int i = 1; i < 5; i++)
+            {
+                new Thread(doWork6).Start(i);
+            }
+            semaphoreSlim.Release(2);
+            Task.Run(async () =>
+            {
+                await Task.Delay(200);
+                semaphoreSlim.Release(1);
+            });
+        }
+        private void StopSemaphoreSlim_Click(object sender, RoutedEventArgs e)
+        {
+            stopAll = true;
         }
 
-        private void StopMonitor_Click(object sender, RoutedEventArgs e)
+        private readonly SemaphoreSlim semaphoreSlim = new(0, 3);
+        private void doWork6(object? state)
         {
-
+            semaphoreSlim.Wait();
+            try
+            {
+                while (!stopAll)
+                {
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " start\n");
+                    Thread.Sleep(1000);
+                    Dispatcher.Invoke(() => ConsoleBlock.Text += state?.ToString() + " finish\n");
+                }
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
         }
 
-        private void StopMutex_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void StopEWH_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void StopSemaphore_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        #endregion
     }
 }
 
